@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "ADS_P1_2_Binaerbaum",
+			"path": "ADS_P1_2_Binaerbaum"
+		},
+		{
+			"name": "ADS_P1_1_Ringpuffer",
+			"path": "ADS_P1_1_Ringpuffer"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"iostream": "cpp"
+		}
+	}
+}
