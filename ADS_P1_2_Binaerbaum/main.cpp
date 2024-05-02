@@ -94,11 +94,26 @@ int main()
             cout << "Name: ";
             cin >> name;
             cout << "Alter: ";
-            cin >> age;
+            if (!(cin >> age)) {
+                cout << "Ungültige Eingabe für Alter." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                break;
+            }
             cout << "Einkommen: ";
-            cin >> income;
+            if (!(cin >> income)) {
+                cout << "Ungültige Eingabe für Einkommen." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                break;
+            }
             cout << "PLZ: ";
-            cin >> postcode;
+            if (!(cin >> postcode)) {
+                cout << "Ungültige Eingabe für PLZ." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                break;
+            }
             t1.addNode(name, age, income, postcode);
             cout << "Datensatz hinzugefuegt" << endl;
             break;
@@ -107,7 +122,12 @@ int main()
             break;
         case 3:
             cout << "NodeOrderID: ";
-            cin >> id;
+            if (!(cin >> id)) {
+                cout << "Ungültige Eingabe für NodeOrderID." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                break;
+            }
             if (t1.deleteNode(id))
             {
                 cout << "Datensatz geloescht" << endl;
