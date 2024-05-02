@@ -210,23 +210,48 @@ void Tree::printPostOrder(){
     printPostOrderHelper(current);
 }
 
+//  void Tree::levelOrder(){
+//     TreeNode* current = m_anker;
+//     if(current == nullptr){
+//         return;
+//     }
+//     std::queue<TreeNode*> q;
+//     q.push(current);
+//     while(!q.empty()){
+//         TreeNode* node = q.front();
+//         node->print();
+//         q.pop();
+//         if(node->getLeft() != nullptr){
+//             q.push(node->getLeft());
+//         }
+//         if(node->getRight() != nullptr){
+//             q.push(node->getRight());
+//         }
+//     }
+// } 
+
+
+void levelOrderHelper(TreeNode* node, int level){
+    if(node == nullptr){
+        return;
+    }
+    if(level == 1){
+        node->print();
+    }else if(level > 1){
+        levelOrderHelper(node->getLeft(), level - 1);
+        levelOrderHelper(node->getRight(), level - 1);
+    }
+}
+
 void Tree::levelOrder(){
     TreeNode* current = m_anker;
     if(current == nullptr){
         return;
     }
-    std::queue<TreeNode*> q;
-    q.push(current);
-    while(!q.empty()){
-        TreeNode* node = q.front();
-        node->print();
-        q.pop();
-        if(node->getLeft() != nullptr){
-            q.push(node->getLeft());
-        }
-        if(node->getRight() != nullptr){
-            q.push(node->getRight());
-        }
+    int h = 10;
+    for(int i = 1; i <= h; i++){
+        cout << "Level " << i << ": " << endl;
+        levelOrderHelper(current, i);
     }
 }
 
@@ -237,8 +262,6 @@ void Tree::printAll(){
     printInOrder();
     cout << "PostOrder: " << endl;
     printPostOrder();
-    cout << "LevelOrder: " << endl;
-    levelOrder();
 }
 
 
