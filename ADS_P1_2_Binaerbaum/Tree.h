@@ -18,6 +18,10 @@ private:
     // Ihr Code hier:
     TreeNode* m_anker;
     int m_currentNodeChronologicalID;
+
+    void printPreOrder();
+    void printInOrder();
+    void printPostOrder();
     //
     ////////////////////////////////////
 
@@ -28,12 +32,9 @@ public:
     ~Tree();
     void addNode(string name, int age, double income, int postcode);
     bool deleteNode(int id);
-    bool searchNode(int name);
+    bool searchNode(string name);
     void printAll();
-    void printLevelOrder();
-    void printPreOrder();
-    void printInOrder();
-    void printPostOrder();
+    void levelOrder();
     //
     ////////////////////////////////////
     // friend-Funktionen sind für die Tests erforderlich und müssen unangetastet

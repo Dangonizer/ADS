@@ -14,7 +14,7 @@ class TreeNode
 private:
     ///////////////////////////////////////
     // Ihr Code hier:
-    int m_NodeOrderId;
+    int m_NodeOrderID;
     int m_NodeChronologicalID;
     string m_Name;
     int m_Age;
@@ -28,23 +28,23 @@ private:
 public:
     ///////////////////////////////////////
     // Ihr Code hier:
-    TreeNode(int, int, string, int, double, int);
-    int get_m_NodeOrderId();
-    int get_m_NodeChronologicalID();
-    string get_m_Name();
-    int get_m_Age();
-    double get_m_Income();
-    int get_m_PostCode();
-    TreeNode* get_m_left();
-    TreeNode* get_m_right();
-    void set_m_NodeOrderId(int);
-    void set_m_NodeChronologicalID(int);
-    void set_m_Name(string);
-    void set_m_Age(int);
-    void set_m_Income(double);
-    void set_m_PostCode(int);
-    void set_m_left(TreeNode*);
-    void set_m_right(TreeNode*);
+    TreeNode(int NodeorderID, int chronologicalID, string name, int alter, double einkommen, int plz);
+    int getNodeOrderID(){return m_NodeOrderID;}
+    int getNodeChronologicalID(){return m_NodeChronologicalID;}
+    string getName(){return m_Name;}
+    int getAge(){return m_Age;}
+    double getIncome(){return m_Income;}
+    int getPostCode(){return m_PostCode;}
+    TreeNode* getLeft(){return m_left;}
+    TreeNode* getRight(){return m_right;}
+    void setNodeOrderID(int id){m_NodeOrderID = id;}
+    void setNodeChronologicalID(int id){m_NodeChronologicalID = id;}
+    void setName(string name){m_Name = name;}
+    void setAge(int age){m_Age = age;}
+    void setIncome(double income){m_Income = income;}
+    void setPostCode(int postcode){m_PostCode = postcode;}
+    void setLeft(TreeNode* left){m_left = left;}
+    void setRight(TreeNode* right){m_right = right;}
     void print();
     //
     ////////////////////////////////////
