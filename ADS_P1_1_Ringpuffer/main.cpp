@@ -34,6 +34,8 @@ int main()
         print_menu();
         int choice;
         cin >> choice;
+        cin.clear();
+		cin.ignore();
         string description;
         string data;
         string search;
