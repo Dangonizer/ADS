@@ -9,6 +9,8 @@
 using namespace std;
 
 // benchmark functions
+void benchmark_insertionsort();
+void benchmark_quicksort_comp();
 void benchmark_quicksort();
 void benchmark_mergesort();
 void benchmark_heapsort();
@@ -22,12 +24,114 @@ int main(int argc, char **argv)
 	std::cout << "\nPress Enter to run measurement" << std::endl;
 	std::cin.get();
 
-	benchmark_quicksort();
-	benchmark_mergesort();
-	benchmark_heapsort();
-	benchmark_shellsort_2n();
+	benchmark_insertionsort();
+	benchmark_quicksort_comp();
+	// benchmark_quicksort();
+	// benchmark_mergesort();
+	// benchmark_heapsort();
+	// benchmark_shellsort_2n();
 
 	return 0;
+}
+
+void benchmark_insertionsort()
+{
+
+	// file stream
+	ofstream quicksort_measurement;
+	quicksort_measurement.open("insertionsort.txt", ios::out | ios::app);
+
+	// benchmark parameters / variables
+	double dtime;
+	int n_start = 5;
+	int n_step = 5;
+	int n_end = 500;
+
+	vector<int> V;
+
+	// actual benchmark loop
+	for (int n = n_start; n <= n_end; n += n_step)
+	{
+
+		//"progress bar"
+		std::cout << "Running Quicksort with n: " << n << std::endl;
+
+		auto result = std::chrono::steady_clock::duration::zero();
+		for (int i = 0; i < 10; i++)
+		{
+			// generate n random integers
+			sorting::randomizeVector(V, n);
+
+			// start measurement
+			// dtime = omp_get_wtime();
+			std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+			// execzute sorting algorithm
+			sorting::InsertionSort(V, 0, V.size() - 1);
+
+			// stop time
+			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+			auto dtime = end - begin;
+			// dtime = omp_get_wtime() - dtime;
+			result += dtime;
+		}
+		result /= 10;
+		// write to file
+		quicksort_measurement << n << "\t" << setprecision(10) << scientific << result.count() << endl;
+	}
+
+	// close file handle
+	quicksort_measurement.close();
+}
+
+void benchmark_quicksort_comp()
+{
+
+	// file stream
+	ofstream quicksort_measurement;
+	quicksort_measurement.open("quicksort_comp.txt", ios::out | ios::app);
+
+	// benchmark parameters / variables
+	double dtime;
+	int n_start = 5;
+	int n_step = 5;
+	int n_end = 500;
+
+	vector<int> V;
+
+	// actual benchmark loop
+	for (int n = n_start; n <= n_end; n += n_step)
+	{
+
+		//"progress bar"
+		std::cout << "Running Quicksort with n: " << n << std::endl;
+
+		auto result = std::chrono::steady_clock::duration::zero();
+		for (int i = 0; i < 10; i++)
+		{
+			// generate n random integers
+			sorting::randomizeVector(V, n);
+
+			// start measurement
+			// dtime = omp_get_wtime();
+			std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+			// execzute sorting algorithm
+			sorting::QuickSort(V, 0, V.size() - 1);
+
+			// stop time
+			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+			auto dtime = end - begin;
+			// dtime = omp_get_wtime() - dtime;
+			result += dtime;
+		}
+		result /= 10;
+		// write to file
+		quicksort_measurement << n << "\t" << setprecision(10) << scientific << result.count() << endl;
+	}
+
+	// close file handle
+	quicksort_measurement.close();
 }
 
 // executes benchmark for quicksort

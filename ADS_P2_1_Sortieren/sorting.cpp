@@ -81,7 +81,7 @@ namespace sorting
 
 	void HybridSort(vector<int> &arr, int left, int right)
 	{
-		const int threshold = 10;
+		const int threshold = 125;
 
 		if (left < right)
 		{
