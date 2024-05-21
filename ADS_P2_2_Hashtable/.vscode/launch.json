@@ -5,34 +5,34 @@
       "name": "C/C++: Debug",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+      "program": "${fileDirname}/${fileBasenameNoExtension}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
-      "environment": [
-        {
-          "name": "PATH", 
-          "value": "C:\\Windows\\System32;${execPath}\\..\\mingw64\\bin\\"
-        }
-      ],
-      "externalConsole": true,
+      "environment": [],
+      "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "${execPath}\\..\\mingw64\\bin\\gdb.exe",
+      "miDebuggerPath": "/usr/bin/gdb",
       "miDebuggerArgs": "-x ${fileDirname}\\.vscode\\.gdbinit",
       "setupCommands": [
         {
+          "description": "Test",
+          "text": "python import sys;sys.path.insert(0, '/usr/share/gcc-14.1.1/python');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
+          "ignoreFailures": false
+        },
+        {
           "description": "Enable pretty-printing for gdb",
           "text": "-enable-pretty-printing",
-          "ignoreFailures": true
+          "ignoreFailures": false
         }
       ],
-      "preLaunchTask": "C/C++: Compile",
       "logging": {
         "moduleLoad": false,
+        "programOutput": false,
         "trace": false,
-        "traceResponse": false,
         "engineLogging": false
-      }
+      },
+      "preLaunchTask": "C/C++: Compile",
     }
   ]
 }
