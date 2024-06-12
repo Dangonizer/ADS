@@ -232,30 +232,254 @@ bool Tree::addNode(std::string Name, int Age, double Income, int PostCode)
 	return true;
 }
 
+int RBCriterionRecHelper(TreeNode *node)
+{
+	int height = 0;
+	// end of tree
+	if (node == nullptr)
+		return -1;
+
+	int heightLeft = RBCriterionRecHelper(node->getLeft());
+	int heightRight = RBCriterionRecHelper(node->getRight());
+
+	// error occured cancel execution
+	if (heightLeft == -2 || heightRight == -2)
+		return -2;
+
+	// leafnode reached
+	if (heightLeft == -1 && heightRight == -1)
+		height = 0;
+
+	// Only left child
+	else if (heightRight == -1)
+	{
+		// only black child increases height
+		if (node->getLeft()->getRed())
+			height = heightLeft;
+		else
+			height = heightLeft + 1;
+	}
+
+	// Only right child
+	else if (heightLeft == -1)
+	{
+		// only black child increases height
+		if (node->getRight()->getRed())
+			height = heightRight;
+		else
+			height = heightRight + 1;
+	}
+
+	// both children red -> same node -> height is equal
+	else if (node->getLeft()->getRed() && node->getRight()->getRed())
+	{
+		if (heightLeft == heightRight)
+			height = heightLeft;
+		else
+			return -2;
+	}
+
+	// both children black -> height is increased by one
+	else if (!node->getLeft()->getRed() && !node->getRight()->getRed())
+	{
+		if (heightLeft == heightRight)
+			height = heightLeft + 1;
+		else
+			return -2;
+	}
+
+	// only left child red -> height is equal to left
+	else if (node->getLeft()->getRed() && !node->getRight()->getRed())
+	{
+		if (heightLeft == heightRight + 1)
+			height = heightLeft;
+		else
+			return -2;
+	}
+
+	// only right child red -> height is equal to right
+	else if (!node->getLeft()->getRed() && node->getRight()->getRed())
+	{
+		if (heightLeft + 1 == heightRight)
+			height = heightRight;
+		else
+			return -2;
+	}
+
+	return height;
+}
+
 int Tree::proofRBCriterion(TreeNode *node)
 {
-	return 0;
+	int result = RBCriterionRecHelper(node);
+	if (result == -2)
+	{
+		std::cout << "RBCriterion not fulfilled" << std::endl;
+		return -1;
+	}
+	std::cout << "RBCriterion fulfilled" << std::endl;
+	return result;
 }
 
-/**
- * Ausgabe aller Knoten in Tabellenform Levelorder-BST
- *
- */
-void Tree::printAll() // Levelorder-BST
+// aka level order BST
+void Tree::printAll()
 {
-	///////////////////////////////////////
-	// Ihr Code hier:
-
-	//
-	///////////////////////////////////////
+	TreeNode *current = m_anker;
+	if (current == nullptr)
+	{
+		return;
+	}
+	std::cout << "  ID | Name            | Age   | Income    | PostCode | OrderID | Red" << std::endl;
+	std::cout << "----+------------------+-------+-----------+----------+---------+------" << std::endl;
+	std::queue<TreeNode *> q;
+	q.push(current);
+	while (!q.empty())
+	{
+		TreeNode *node = q.front();
+		node->print();
+		q.pop();
+		if (node->getLeft() != nullptr)
+		{
+			q.push(node->getLeft());
+		}
+		if (node->getRight() != nullptr)
+		{
+			q.push(node->getRight());
+		}
+	}
 }
 
+// aka level order 2-3-4 tree
 void Tree::printLevelOrder()
 {
-	return;
+	if (m_anker != nullptr)
+	{
+		std::queue<TreeNode *> Nodes;
+		std::queue<int> Niveaus;
+
+		Nodes.push(m_anker);
+		Niveaus.push(0);
+		int old_niveu = -1;
+		while (!Nodes.empty())
+		{
+			auto node = Nodes.front();
+			auto niveau = Niveaus.front();
+			Nodes.pop();
+			Niveaus.pop();
+
+			if (niveau != old_niveu)
+			{
+				std::cout << std::endl
+						  << "Niveau: " << niveau;
+				old_niveu = niveau;
+			}
+
+			std::cout << " ( ";
+
+			if (node->getLeft() != nullptr)
+			{
+				if (node->getLeft()->getRed())
+				{
+
+					std::cout << node->getLeft()->getNodeOrderID() << ", ";
+
+					if (node->getLeft()->getLeft() != nullptr)
+					{
+						Nodes.push(node->getLeft()->getLeft());
+						Niveaus.push(niveau + 1);
+					}
+					if (node->getLeft()->getRight() != nullptr)
+					{
+						Nodes.push(node->getLeft()->getRight());
+						Niveaus.push(niveau + 1);
+					}
+				}
+
+				else
+				{
+					Nodes.push(node->getLeft());
+					Niveaus.push(niveau + 1);
+				}
+			}
+
+			std::cout << node->getNodeOrderID();
+
+			if (node->getRight() != nullptr)
+			{
+				if (node->getRight()->getRed())
+				{
+
+					std::cout << ", " << node->getRight()->getNodeOrderID();
+
+					if (node->getRight()->getLeft() != nullptr)
+					{
+						Nodes.push(node->getRight()->getLeft());
+						Niveaus.push(niveau + 1);
+					}
+					if (node->getRight()->getRight() != nullptr)
+					{
+						Nodes.push(node->getRight()->getRight());
+						Niveaus.push(niveau + 1);
+					}
+				}
+				else
+				{
+					Nodes.push(node->getRight());
+					Niveaus.push(niveau + 1);
+				}
+			}
+			std::cout << " )";
+		}
+		std::cout << std::endl;
+	}
 }
 
+void printNiveau(int start, int end, TreeNode *node)
+{
+	if (node == nullptr)
+		return;
+
+	if (start == end)
+	{
+
+		std::cout << "(";
+		if (node->getLeft() != nullptr && node->getLeft()->getRed())
+			std::cout << node->getLeft()->getNodeOrderID() << ", ";
+
+		std::cout << node->getNodeOrderID();
+
+		if (node->getRight() != nullptr && node->getRight()->getRed())
+			std::cout << ", " << node->getRight()->getNodeOrderID();
+
+		std::cout << ")";
+	}
+
+	if (node->getLeft() != nullptr && !node->getLeft()->getRed())
+		printNiveau(start + 1, end, node->getLeft());
+
+	else if (node->getLeft() != nullptr && node->getLeft()->getRed())
+	{
+		printNiveau(start + 1, end, node->getLeft()->getLeft());
+		printNiveau(start + 1, end, node->getLeft()->getRight());
+	}
+
+	else if (node->getRight() != nullptr && !node->getRight()->getRed())
+		printNiveau(start + 1, end, node->getRight());
+
+	else if (node->getRight() != nullptr && node->getRight()->getRed())
+	{
+		printNiveau(start + 1, end, node->getRight()->getLeft());
+		printNiveau(start + 1, end, node->getRight()->getRight());
+	}
+
+	else
+		return;
+}
+
+// aka print only one lvl of 2-3-4 tree
 void Tree::printLevelOrder(int level)
 {
-	return;
+	std::cout << "Level " << level << ": ";
+	printNiveau(0, level, m_anker);
+	std::cout << std::endl;
 }

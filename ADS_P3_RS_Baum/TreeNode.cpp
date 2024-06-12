@@ -1,6 +1,7 @@
 #include "TreeNode.h"
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 TreeNode::TreeNode(int nNodePos, int id, std::string name, int age, double income, int postCode)
 	: m_NodeChronologicalID{id},
@@ -100,10 +101,11 @@ void TreeNode::setParent(TreeNode *nParent)
 
 void TreeNode::print() const
 {
-	std::cout << "NodeID: " << this->m_NodeOrderID
-			  << ", Name: " << this->m_Name
-			  << ", Alter: " << this->m_Age
-			  << ", Einkommen: " << this->m_Income
-			  << ", PLZ: " << this->m_PostCode
-			  << ", PosID: " << this->m_NodeChronologicalID << std::endl;
+	std::cout << std::setw(4) << this->getNodeChronologicalID() << "|"
+			  << std::setw(18) << this->getName() << "|"
+			  << std::setw(7) << this->getAge() << "|"
+			  << std::setw(11) << this->getIncome() << "|"
+			  << std::setw(10) << this->getPostCode() << "|"
+			  << std::setw(9) << this->getNodeOrderID() << "|"
+			  << std::setw(6) << this->getRed() << std::endl;
 }
