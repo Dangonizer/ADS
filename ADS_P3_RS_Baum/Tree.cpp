@@ -451,7 +451,8 @@ void printNiveau(int start, int end, TreeNode *node)
 		if (node->getRight() != nullptr && node->getRight()->getRed())
 			std::cout << ", " << node->getRight()->getNodeOrderID();
 
-		std::cout << ")";
+		std::cout << ") ";
+		return;
 	}
 
 	if (node->getLeft() != nullptr && !node->getLeft()->getRed())
@@ -463,7 +464,7 @@ void printNiveau(int start, int end, TreeNode *node)
 		printNiveau(start + 1, end, node->getLeft()->getRight());
 	}
 
-	else if (node->getRight() != nullptr && !node->getRight()->getRed())
+	if (node->getRight() != nullptr && !node->getRight()->getRed())
 		printNiveau(start + 1, end, node->getRight());
 
 	else if (node->getRight() != nullptr && node->getRight()->getRed())
@@ -471,9 +472,6 @@ void printNiveau(int start, int end, TreeNode *node)
 		printNiveau(start + 1, end, node->getRight()->getLeft());
 		printNiveau(start + 1, end, node->getRight()->getRight());
 	}
-
-	else
-		return;
 }
 
 // aka print only one lvl of 2-3-4 tree
