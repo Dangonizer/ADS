@@ -362,8 +362,8 @@ void Tree::printLevelOrder()
 		int old_niveu = -1;
 		while (!Nodes.empty())
 		{
-			auto node = Nodes.front();
-			auto niveau = Niveaus.front();
+			TreeNode *node = Nodes.front();
+			int niveau = Niveaus.front();
 			Nodes.pop();
 			Niveaus.pop();
 
