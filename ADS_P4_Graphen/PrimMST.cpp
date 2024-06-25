@@ -8,9 +8,28 @@
  */
 PrimMST::PrimMST(EdgeWeightedGraph G, int s)
 {
-	/*
-	 * TODO
-	 */
+	marked.resize(G.getV(), false);
+	visit(G, s);
+	while (!pq.empty())
+	{
+		Edge e = pq.top();
+		pq.pop();
+		int v = e.either();
+		int w = e.other(v);
+		if (marked[v] && marked[w])
+		{
+			continue;
+		}
+		mst.push_back(e);
+		if (!marked[v])
+		{
+			visit(G, v);
+		}
+		if (!marked[w])
+		{
+			visit(G, w);
+		}
+	}
 }
 
 /**
@@ -21,9 +40,14 @@ PrimMST::PrimMST(EdgeWeightedGraph G, int s)
  */
 void PrimMST::visit(EdgeWeightedGraph G, int v)
 {
-	/*
-	 * TODO
-	 */
+	marked[v] = true;
+	for (Edge e : G[v])
+	{
+		if (!marked[e.other(v)])
+		{
+			pq.push(e);
+		}
+	}
 }
 
 /**
@@ -33,10 +57,7 @@ void PrimMST::visit(EdgeWeightedGraph G, int v)
  */
 std::vector<Edge> PrimMST::edges() const
 {
-	/*
-	 * TODO
-	 */
-	return std::vector<Edge>();
+	return mst;
 }
 
 /**
@@ -46,8 +67,10 @@ std::vector<Edge> PrimMST::edges() const
  */
 double PrimMST::weight() const
 {
-	/*
-	 * TODO
-	 */
-	return 0.0;
+	double sum = 0.0;
+	for (Edge e : mst)
+	{
+		sum += e.weight();
+	}
+	return sum;
 }

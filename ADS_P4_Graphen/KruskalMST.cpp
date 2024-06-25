@@ -7,9 +7,37 @@
  */
 KruskalMST::KruskalMST(EdgeWeightedGraph G)
 {
-	/*
-	 * TODO
-	 */
+	treeID.resize(G.getV());
+	for (int i = 0; i < G.getV(); i++)
+	{
+		treeID[i] = i;
+	}
+	std::priority_queue<Edge, std::vector<Edge>, std::greater<Edge>> pq;
+	for (Edge e : G.edges())
+	{
+		pq.push(e);
+	}
+	while (!pq.empty())
+	{
+		Edge e = pq.top();
+		pq.pop();
+		int v = e.either();
+		int w = e.other(v);
+		if (treeID[v] == treeID[w])
+		{
+			continue;
+		}
+		mst.push_back(e);
+		int oldID = treeID[w];
+		int newID = treeID[v];
+		for (int i = 0; i < G.getV(); i++)
+		{
+			if (treeID[i] == oldID)
+			{
+				treeID[i] = newID;
+			}
+		}
+	}
 }
 
 /**
@@ -19,10 +47,7 @@ KruskalMST::KruskalMST(EdgeWeightedGraph G)
  */
 std::vector<Edge> KruskalMST::edges() const
 {
-	/*
-	 * TODO
-	 */
-	return std::vector<Edge>();
+	return mst;
 }
 
 /**
@@ -32,8 +57,10 @@ std::vector<Edge> KruskalMST::edges() const
  */
 double KruskalMST::weight() const
 {
-	/*
-	 * TODO
-	 */
-	return 0.0;
+	double sum = 0.0;
+	for (Edge e : mst)
+	{
+		sum += e.weight();
+	}
+	return sum;
 }
