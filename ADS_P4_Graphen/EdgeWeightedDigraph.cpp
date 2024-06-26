@@ -32,17 +32,16 @@ void EdgeWeightedDigraph::validateVertexWithError(int v) const
  * \param[in]  V		Anzahl der Knoten
  */
 EdgeWeightedDigraph::EdgeWeightedDigraph(int V)
-	: V{V}
-	, E{0}
+	: V{V}, E{0}
 {
 	adj.resize(V);
 }
 
 /**
-* Erstellt einen Kantengewichteten-Gaph anhand der Kantenliste in fname
-*
-* \param[in]  fname		Dateiname der Kantenliste
-*/
+ * Erstellt einen Kantengewichteten-Gaph anhand der Kantenliste in fname
+ *
+ * \param[in]  fname		Dateiname der Kantenliste
+ */
 EdgeWeightedDigraph::EdgeWeightedDigraph(std::string filename)
 {
 	std::ifstream infile(filename);
@@ -118,7 +117,8 @@ std::vector<std::vector<DirectedEdge>> EdgeWeightedDigraph::getAdj() const
 std::vector<DirectedEdge> EdgeWeightedDigraph::getAdj(int v) const
 {
 	std::vector<DirectedEdge> neighbors;
-	for (auto const& n : adj[v]) {
+	for (auto const &n : adj[v])
+	{
 		neighbors.push_back(n);
 	}
 	return neighbors;
@@ -144,8 +144,22 @@ std::vector<DirectedEdge> EdgeWeightedDigraph::edges() const
 
 bool EdgeWeightedDigraph::del_Edge(DirectedEdge e)
 {
-	return false;
-	//Muss von Ihnen implementiert werden
+	bool delOK = false;
+	if (validateVertex(e.from()) && validateVertex(e.to()))
+	{
+		for (int i = 0; i < this->adj[e.from()].size(); i++)
+		{
+			if (this->adj[e.from()][i] == e)
+			{
+				this->adj[e.from()].erase(this->adj[e.from()].begin() + i);
+				E--;
+				delOK = true;
+				// break;
+			}
+		}
+	}
+	return delOK;
+	// Muss von Ihnen implementiert werden
 }
 
 /**
@@ -158,6 +172,3 @@ const std::vector<DirectedEdge> EdgeWeightedDigraph::operator[](int from) const
 {
 	return this->adj[from];
 }
-
-
-
