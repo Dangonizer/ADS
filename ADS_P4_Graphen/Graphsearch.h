@@ -19,6 +19,7 @@ namespace Graphsearch
 	 */
 	void DFS_recursive(const EdgeWeightedGraph &G, int v, std::vector<bool> &marked, std::vector<int> &edgeTo)
 	{
+		std::cout << v << " -> ";
 		marked[v] = true;
 		for (Edge e : G.getAdj(v))
 		{
@@ -48,6 +49,9 @@ namespace Graphsearch
 	{
 		// marked.resize(G.getV(), false);
 		// edgeTo.resize(G.getV(), -1);
+		std::cout << "Tiefensuche (Depth-First-Search (DFS)) - Startknoten: " << v << std::endl;
+		std::cout << "Besuchsreihenfolge:" << std::endl;
+
 		marked = std::vector<bool>(G.getV(), false);
 		edgeTo = std::vector<int>(G.getV(), -1);
 		DFS_recursive(G, v, marked, edgeTo);
@@ -60,6 +64,29 @@ namespace Graphsearch
 				break;
 			}
 		}
+
+		std::cout << std::endl;
+		std::cout << "EdgeToArray:" << std::endl;
+		for (int i = 0; i < G.getV(); i++)
+		{
+			std::cout << i << " -> " << edgeTo[i] << std::endl;
+		}
+
+		std::cout << "Marked:" << std::endl;
+		for (int i = 0; i < G.getV(); i++)
+		{
+			std::cout << i << " -> " << marked[i] << std::endl;
+		}
+
+		if (connected)
+		{
+			std::cout << "Der Graph ist zusammenhaengend." << std::endl;
+		}
+		else
+		{
+			std::cout << "Der Graph ist nicht zusammenhaengend." << std::endl;
+		}
+
 		return connected;
 	}
 
@@ -78,10 +105,17 @@ namespace Graphsearch
 	{
 		// marked.resize(G.getV(), false);
 		// edgeTo.resize(G.getV(), -1);
+
+		std::cout << "Breitensuche (Breadth-First-Search (BFS)) - Startknoten: " << v << std::endl;
+		std::cout << "Besuchsreihenfolge:" << std::endl;
+
 		marked = std::vector<bool>(G.getV(), false);
 		edgeTo = std::vector<int>(G.getV(), -1);
 		std::queue<int> q;
 		q.push(v);
+
+		std::cout << v << " -> ";
+
 		marked[v] = true;
 		while (!q.empty())
 		{
@@ -94,6 +128,9 @@ namespace Graphsearch
 				{
 					edgeTo[x] = w;
 					marked[x] = true;
+
+					std::cout << x << " -> ";
+
 					q.push(x);
 				}
 			}
@@ -107,6 +144,29 @@ namespace Graphsearch
 				break;
 			}
 		}
+
+		std::cout << std::endl;
+		std::cout << "EdgeToArray:" << std::endl;
+		for (int i = 0; i < G.getV(); i++)
+		{
+			std::cout << i << " -> " << edgeTo[i] << std::endl;
+		}
+
+		std::cout << "Marked:" << std::endl;
+		for (int i = 0; i < G.getV(); i++)
+		{
+			std::cout << i << " -> " << marked[i] << std::endl;
+		}
+
+		if (connected)
+		{
+			std::cout << "Der Graph ist zusammenhaengend." << std::endl;
+		}
+		else
+		{
+			std::cout << "Der Graph ist nicht zusammenhaengend." << std::endl;
+		}
+
 		return connected;
 	}
 }
