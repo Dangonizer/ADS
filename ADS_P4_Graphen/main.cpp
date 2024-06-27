@@ -22,7 +22,7 @@ void printMenu()
 	cout << "8) Kante löschen" << endl;
 	cout << "9) Kante hinzufügen" << endl;
 	cout << "10)Programm beenden" << endl;
-	cout << " Weiter mit beliebiger Eingabe ..." << endl;
+	cout << "Weiter mit beliebiger Eingabe ..." << endl;
 	cout << "?>" << endl;
 }
 
@@ -30,43 +30,6 @@ int main()
 {
 	// Starte Unit-Tests
 	Catch::Session().run();
-
-	//------------------------------------------------------------------------
-	// 1. Ausgabe eines Graphen als Adjazenzliste implementieren
-	//------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------
-	// 2. Suche in Graphen
-	//------------------------------------------------------------------------
-	// Verwenden Sie hierf�r die Vorlagen in Graphsearch.h
-	//
-	// Beispielaufruf der Tiefensuche:
-	// std::vector<bool> marked;
-	// std::vector<int>  edgeTo;
-	// bool connected = Graphsearch::DFS(G1, start, marked, edgeTo);
-
-	//------------------------------------------------------------------------
-	// 3. Minimaler Spannbaum mit Prim und Kruskal
-	//------------------------------------------------------------------------
-	// Vorlage f�r Prim ist die Klasse PrimMST (PrimMST.h + PrimMST.cpp)
-	// Vorlage f�r Kruskal ist die Klasse KruskalMST (KruskalMST.h + KruskalMST.cpp)
-	//
-	// Beispielaufruf von Prim:
-	// PrimMST prim(G, 0);
-
-	//------------------------------------------------------------------------
-	// 4. Kuerzeste Wege mit Dijkstra
-	//------------------------------------------------------------------------
-	// Beispielaufruf von Dijkstra
-	//
-	// EdgeWeightedDigraph G1_directed("graph1.txt");
-	// Dijkstra dijkstra(G1_directed, start);
-	// path = dijkstra.pathTo(target);
-
-	//------------------------------------------------------------------------
-	// 5. Men� f�r Benutzereingaben
-	//------------------------------------------------------------------------
-	// Alle Funktionalit�ten aus der Aufgabenstellung muessen umgesetzt werden
 
 	EdgeWeightedGraph *G1 = nullptr;
 	EdgeWeightedDigraph *G1_directed = nullptr;
@@ -135,9 +98,49 @@ int main()
 			Graphsearch::BFS(*G1, start, *marked, *edgeTo);
 			break;
 		case 4:
+			if (G1 == nullptr)
+			{
+				cout << "Kein Graph eingelesen." << endl;
+				break;
+			}
+			cout << "Startknoten: ";
+			if (!(cin >> start))
+			{
+				cout << "Ungültige Eingabe für Startknoten." << endl;
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				break;
+			}
+			PrimMST *prim;
+			prim = new PrimMST(*G1, start);
+			cout << "Minimaler Spannbaum (MST) nach Prim:" << endl;
+			cout << "Gewicht: " << prim->weight() << endl;
+			cout << "Adjazenzliste:" << endl;
 
+			for (int v = 0; v < G1->getV(); v++)
+			{
+				cout << v << " ";
+				for (Edge e : prim->edges())
+				{
+					if (e.either() == v /* || e.other(e.either()) == v */)
+					{
+						int w = e.other(v);
+						cout << "->" << w << " [" << e.weight() << "] ";
+					}
+				}
+				cout << endl;
+			}
 			break;
 		case 5:
+			if (G1 == nullptr)
+			{
+				cout << "Kein Graph eingelesen." << endl;
+				break;
+			}
+			KruskalMST *kruskal;
+			cout << "Minimaler Spannbaum (MST) nach Kruskal:" << endl;
+			kruskal = new KruskalMST(*G1);
+			cout << "Gesamtgewicht: " << kruskal->weight() << endl;
 
 			break;
 		case 6:
@@ -157,19 +160,27 @@ int main()
 			}
 			DijkstraSP *dijkstra;
 			dijkstra = new DijkstraSP(*G1_directed, start);
-			for (int i = 0; i < G1_directed->getV(); i++)
+			cout << "Wähle Zielknoten: ";
+			int ziel;
+			if (!(cin >> ziel))
 			{
-				if (dijkstra->hasPathTo(i))
-				{
-					cout << "Kürzester Weg von " << start << " nach " << i << ": " << dijkstra->distTo(i) << endl;
-					cout << "Pfad: ";
-					for (DirectedEdge e : dijkstra->pathTo(i))
-					{
-						cout << e.from() << "->" << e.to() << " [" << e.weight() << "] ";
-					}
-					cout << endl;
-				}
+				cout << "Ungültige Eingabe für Zielknoten." << endl;
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				break;
 			}
+			cout << "Kürzeste Wege nach Dijkstra:" << endl;
+			cout << "Start: " << start << endl;
+			cout << "Ziel: " << ziel << endl;
+			cout << "Pfad: ";
+			for (DirectedEdge e : dijkstra->pathTo(ziel))
+			{
+				if (e == dijkstra->pathTo(ziel).front())
+					cout << e.from();
+				cout << " [" << e.weight() << "] " << "-> " << e.to();
+			}
+			cout << endl;
+			cout << "Kosten: " << dijkstra->distTo(ziel) << endl;
 			break;
 		case 7:
 			if (G1 == nullptr)

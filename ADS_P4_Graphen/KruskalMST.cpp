@@ -1,5 +1,5 @@
 #include "KruskalMST.h"
-
+#include <iostream>
 /**
  * Erstellt einen MST zum Graph G mit dem Kruskal Algorithmus
  *
@@ -17,6 +17,14 @@ KruskalMST::KruskalMST(EdgeWeightedGraph G)
 	{
 		pq.push(e);
 	}
+
+	std::cout << "Kante";
+	for (int i = 0; i < G.getV(); i++)
+	{
+		std::cout << " | " << i;
+	}
+	std::cout << std::endl;
+
 	while (!pq.empty())
 	{
 		Edge e = pq.top();
@@ -37,6 +45,24 @@ KruskalMST::KruskalMST(EdgeWeightedGraph G)
 				treeID[i] = newID;
 			}
 		}
+
+		std::cout << "(" << e.either() << ", " << e.other(e.either()) << ", " << e.weight() << ")";
+		for (int i = 0; i < G.getV(); i++)
+		{
+			std::cout << " | " << treeID[i];
+		}
+		std::cout << std::endl;
+	}
+
+	std::vector<int> partialWeight(G.getV(), 0);
+	for (Edge e : mst)
+	{
+		partialWeight[treeID[e.either()]] += e.weight();
+	}
+	for (int i = 0; i < G.getV(); i++)
+	{
+		if (partialWeight[i] != 0)
+			std::cout << "Gewicht Teilbaum " << i << ": " << partialWeight[i] << std::endl;
 	}
 }
 

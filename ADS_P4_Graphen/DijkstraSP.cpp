@@ -1,5 +1,6 @@
 #include <assert.h>
 #include "DijkstraSP.h"
+#include <iostream>
 
 /**
  * F�ge eine Kante mit minimalen Kosten hinzu, die von einem
@@ -46,6 +47,30 @@ DijkstraSP::DijkstraSP(EdgeWeightedDigraph G, int s)
 		int v = pq.top().value;
 		pq.pop();
 		relax(G, v);
+	}
+
+	std::cout << "Knoten i | distTo[i] | edgeTo[i]" << std::endl;
+	for (int i = 0; i < G.getV(); i++)
+	{
+		std::cout << i << " | ";
+		if (distToVect[i] < __DBL_MAX__)
+		{
+			std::cout << distToVect[i];
+		}
+		else
+		{
+			std::cout << "Max";
+		}
+		std::cout << " | ";
+		if (edgeTo.count(i) > 0)
+		{
+			std::cout << edgeTo[i].from();
+		}
+		else
+		{
+			std::cout << "-";
+		}
+		std::cout << std::endl;
 	}
 }
 
