@@ -2,18 +2,32 @@
 #include "DijkstraSP.h"
 
 /**
- * Füge eine Kante mit minimalen Kosten hinzu, die von einem
- * Baumknoten zu einem Nicht-Baumknoten verläuft und deren
- * Ziel w dem Startknoten s am nächsten ist.
+ * Fï¿½ge eine Kante mit minimalen Kosten hinzu, die von einem
+ * Baumknoten zu einem Nicht-Baumknoten verlï¿½uft und deren
+ * Ziel w dem Startknoten s am nï¿½chsten ist.
  *
  * \param[in]  G		Kantengewichteter-Digraph
  * \param[in]  v		Zielknoten
  */
 void DijkstraSP::relax(EdgeWeightedDigraph G, int v)
 {
-	/*
-	 * TODO
-	 */
+	for (DirectedEdge e : G.getAdj(v))
+	{
+		int w = e.to();
+		if (distToVect[w] > distToVect[v] + e.weight())
+		{
+			distToVect[w] = distToVect[v] + e.weight();
+			edgeTo[w] = e;
+			if (pq.contains(w))
+			{
+				pq.change(w, distToVect[w]);
+			}
+			else
+			{
+				pq.push(w, distToVect[w]);
+			}
+		}
+	}
 }
 
 /**
@@ -24,9 +38,15 @@ void DijkstraSP::relax(EdgeWeightedDigraph G, int v)
  */
 DijkstraSP::DijkstraSP(EdgeWeightedDigraph G, int s)
 {
-	/*
-	 * TODO
-	 */
+	distToVect.resize(G.getV(), __DBL_MAX__);
+	distToVect[s] = 0.0;
+	pq.push(s, 0.0);
+	while (!pq.empty())
+	{
+		int v = pq.top().value;
+		pq.pop();
+		relax(G, v);
+	}
 }
 
 /**
@@ -37,10 +57,7 @@ DijkstraSP::DijkstraSP(EdgeWeightedDigraph G, int s)
  */
 double DijkstraSP::distTo(int v) const
 {
-	/*
-	 * TODO
-	 */
-	return 0.0;
+	return distToVect[v];
 }
 
 /**
@@ -51,9 +68,10 @@ double DijkstraSP::distTo(int v) const
  */
 bool DijkstraSP::hasPathTo(int v) const
 {
-	/*
-	 * TODO
-	 */
+	if (distToVect[v] < __DBL_MAX__)
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -63,10 +81,24 @@ bool DijkstraSP::hasPathTo(int v) const
  * \param[in]  v		Zielknoten
  * \return Vektor mit allen Kanten des Pfades von s nach v
  */
-std::vector<DirectedEdge> DijkstraSP::pathTo(int v) 
+std::vector<DirectedEdge> DijkstraSP::pathTo(int v)
 {
-	/*
-	 * TODO
-	 */
+	if (hasPathTo(v))
+	{
+		std::vector<DirectedEdge> path;
+		DirectedEdge e = edgeTo[v];
+		// for (DirectedEdge e = edgeTo[v]; edgeTo.count(e.to()) > 0; e = edgeTo[e.from()])
+		while (true)
+		{
+			path.push_back(e);
+			if (edgeTo.count(e.from()) == 0)
+			{
+				break;
+			}
+			e = edgeTo[e.from()];
+		}
+		std::reverse(path.begin(), path.end());
+		return path;
+	}
 	return std::vector<DirectedEdge>();
 }
